@@ -17,7 +17,6 @@ public class ExtClassLoader extends ClassLoader {
 
 
     /**
-     *
      * @param dir
      * @param name
      * @param className
@@ -30,18 +29,25 @@ public class ExtClassLoader extends ClassLoader {
         return super.defineClass(className, data, 0, data.length);
     }
 
+    /**
+     * 读取数据
+     *
+     * @param fullUrl
+     * @return
+     * @throws Exception
+     */
     private byte[] loadData(String fullUrl) throws Exception {
-        InputStream inputStream = new FileInputStream(fullUrl);
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        byte[] bys = new byte[1024];
-        int len = 0;
-        while ((len = inputStream.read(bys)) != -1) {
-            bos.write(bys, 0, len);
+        InputStream fileInputStream = new FileInputStream(fullUrl);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] outputByte = new byte[1024];
+        int len;
+        while ((len = fileInputStream.read(outputByte)) != -1) {
+            byteArrayOutputStream.write(outputByte, 0, len);
         }
-        byte[] bytes = bos.toByteArray();
-        byte[] out = new byte[bytes.length];
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        byte[] out = new byte[byteArray.length];
         int i = 0;
-        for (byte aByte : bytes) {
+        for (byte aByte : byteArray) {
             out[i] = (byte) ((byte) 255 - aByte);
             i++;
         }
