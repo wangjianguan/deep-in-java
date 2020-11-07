@@ -52,7 +52,7 @@ public class ExtClassLoader extends ClassLoader {
                 byteArrayOutputStream.write(outputByte, 0, len);
             }
             byte[] byteArray = byteArrayOutputStream.toByteArray();
-            // 解密
+            // 解码
             out = new byte[byteArray.length];
             int i = 0;
             for (byte aByte : byteArray) {
