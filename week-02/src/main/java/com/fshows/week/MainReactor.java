@@ -4,6 +4,8 @@
  */
 package com.fshows.week;
 
+import com.fshows.week.utils.AsyncExecutor;
+
 import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -71,7 +73,7 @@ public class MainReactor {
         // 启动子reactor中,开始从selector上去监听读事件
         subReactor.listenReadable();
         // 启动监听
-        mainReactor.listen();
+        AsyncExecutor.acceptExecutor.execute(mainReactor::listen);
 
 
     }
@@ -87,9 +89,8 @@ public class MainReactor {
         try {
             System.out.println("MainReactor 开始监听请求来的客户端,线程名称:" + Thread.currentThread().getName());
             while (true) {
-                System.out.println("MainReactor 阻塞等待注册,线程名称:" + Thread.currentThread().getName());
                 // 阻塞监听
-                int selectCount = selector.select();
+                int selectCount = selector.select(1000);
                 if (selectCount > 0) {
                     System.out.println("MainReactor 阻塞等待注册完成,有请求的客户端了,线程名称:" + Thread.currentThread().getName() + "selectCount :" + selectCount);
                     Iterator<SelectionKey> selectionKeyIterator = selector.selectedKeys().iterator();
@@ -105,6 +106,7 @@ public class MainReactor {
                             subReactor.register(socketChannel);
                         }
                         selectionKeyIterator.remove();
+
                     }
                 }
             }

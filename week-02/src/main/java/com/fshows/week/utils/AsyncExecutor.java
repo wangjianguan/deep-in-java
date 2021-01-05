@@ -20,10 +20,20 @@ public class AsyncExecutor {
      */
     public static ThreadPoolExecutor workerExecutor;
 
+    /**
+     * 轮询accept线程池
+     */
+    public static ThreadPoolExecutor acceptExecutor;
+
     static {
         workerExecutor = new ThreadPoolExecutor(10, 20, 20L, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(20),
                 ThreadFactoryImpl.instance("worker_executor_"));
+
+
+        acceptExecutor = new ThreadPoolExecutor(10, 20, 20L, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>(20),
+                ThreadFactoryImpl.instance("accept_executor_"));
 
 
     }
